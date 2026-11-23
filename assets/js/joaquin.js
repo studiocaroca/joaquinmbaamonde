@@ -43,12 +43,56 @@ $(document).ready(function(){
 
 //modal
 document.addEventListener('DOMContentLoaded', function () {
+    // Datos del proveedor de un vídeo a partir de su data-src
+    function videoInfo(src) {
+        var vimeo = src.match(/player\.vimeo\.com\/video\/(\d+)/);
+        if (vimeo) return { name: 'Vimeo', url: 'https://vimeo.com/' + vimeo[1] };
+        var yt = src.match(/youtube(?:-nocookie)?\.com\/embed\/([\w-]+)/);
+        if (yt) return { name: 'YouTube', url: 'https://www.youtube.com/watch?v=' + yt[1] };
+        return { name: 'el proveedor', url: src };
+    }
+
+    function removePlaceholder(modal) {
+        var ph = modal.querySelector('.video-consent');
+        if (ph) ph.remove();
+    }
+
+    // Los vídeos de terceros solo se cargan si el visitante aceptó las cookies de vídeo
+    function loadVideo(modal) {
+        var iframe = modal.querySelector('iframe[data-src]');
+        if (!iframe) return;
+        var src = iframe.getAttribute('data-src');
+
+        if (window.JBConsent && JBConsent.has('video')) {
+            removePlaceholder(modal);
+            iframe.hidden = false;
+            iframe.setAttribute('src', src);
+            return;
+        }
+
+        iframe.hidden = true;
+        iframe.setAttribute('src', '');
+        removePlaceholder(modal);
+        var info = videoInfo(src);
+        var t = window.JBConsent ? JBConsent.t : function (k) { return k; };
+        var ph = document.createElement('div');
+        ph.className = 'video-consent';
+        ph.innerHTML =
+            '<p>' + t('videoBlocked').replace('{p}', info.name) + '</p>' +
+            '<div class="video-consent__actions">' +
+            '<button type="button" class="cc-btn" data-video-accept>' + t('videoAccept') + '</button>' +
+            '<a class="cc-btn" href="' + info.url + '" target="_blank" rel="noopener noreferrer">' +
+            t('videoExternal').replace('{p}', info.name) + '</a>' +
+            '</div>';
+        ph.querySelector('[data-video-accept]').addEventListener('click', function () {
+            JBConsent.set({ video: true });
+        });
+        iframe.parentNode.appendChild(ph);
+    }
+
     function openModal(modal) {
         modal.style.display = 'block';
-        var iframe = modal.querySelector('iframe[data-src]');
-        if (iframe) {
-            iframe.setAttribute('src', iframe.getAttribute('data-src'));
-        }
+        loadVideo(modal);
     }
 
     function closeModal(modal) {
@@ -57,7 +101,17 @@ document.addEventListener('DOMContentLoaded', function () {
         if (iframe) {
             iframe.setAttribute('src', '');
         }
+        removePlaceholder(modal);
     }
+
+    // Si cambia el consentimiento o el idioma con un vídeo abierto, se actualiza
+    function refreshOpenModals() {
+        document.querySelectorAll('.modal').forEach(function (modal) {
+            if (modal.style.display === 'block') loadVideo(modal);
+        });
+    }
+    document.addEventListener('jb:consent', refreshOpenModals);
+    document.addEventListener('jb:lang', refreshOpenModals);
 
     // Get all links that open modals
     var links = document.querySelectorAll('.openModalLink');
@@ -102,7 +156,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 const key = element.getAttribute('data-translate');
                 if (translation[section] && translation[section][key]) {
                     const value = translation[section][key];
-                    if (element.hasAttribute('data-translate-placeholder')) {
+                    if (element.hasAttribute('data-translate-html')) {
+                        element.innerHTML = value;
+                    } else if (element.hasAttribute('data-translate-placeholder')) {
                         element.setAttribute('placeholder', value);
                     } else if (element.hasAttribute('data-translate-value')) {
                         element.setAttribute('value', value);
@@ -122,12 +178,16 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             const translations = await response.json();
 
-            const allLanguages = ['en', 'es', 'pt'];
-            let currentLanguage = 'en';
+            const allLanguages = ['es', 'en', 'pt'];
+            let currentLanguage = window.JBLang ? JBLang.get() : 'es';
 
-            function setLanguage(lang) {
+            function setLanguage(lang, remember) {
                 currentLanguage = lang;
                 updateTranslations(translations, lang);
+                if (window.JBLang) {
+                    if (remember) JBLang.set(lang);
+                    else document.documentElement.setAttribute('lang', lang);
+                }
                 langCurrent.textContent = lang.toUpperCase();
                 langDropdown.innerHTML = allLanguages
                     .filter(l => l !== lang)
@@ -135,7 +195,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     .join('');
             }
 
-            setLanguage('en');
+            setLanguage(currentLanguage);
 
             langCurrent.addEventListener('click', function (e) {
                 e.stopPropagation();
@@ -145,7 +205,7 @@ document.addEventListener('DOMContentLoaded', function () {
             langDropdown.addEventListener('click', function (e) {
                 const option = e.target.closest('.lang-selector__option');
                 if (option) {
-                    setLanguage(option.getAttribute('data-language'));
+                    setLanguage(option.getAttribute('data-language'), true);
                     langDropdown.classList.remove('open');
                 }
             });

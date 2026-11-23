@@ -44,7 +44,9 @@
             "name": "Name",
             "email": "Email",
             "message": "Message",
-            "button": "Send"
+            "button": "Send",
+            "privacy": "I have read and accept the <a href=\"politica-privacidad.html\" target=\"_blank\">Privacy Policy</a>.",
+            "privacyInfo": "Data controller: Joaquín Manuel Baamonde. Purpose: to answer your enquiry. Rights: access, rectification, erasure and others, by writing to joaquinmbaamonde@gmail.com."
         },
         "footer": {
             "title-about-us": "About me",
@@ -54,7 +56,12 @@
             "services": "Services",
             "contact": "Contact me",
             "title-info": "Contact information",
-            "subtitle-info": "Reach out and I'll respond within 24 hours"
+            "subtitle-info": "Reach out and I'll respond within 24 hours",
+            "legal": "Legal notice",
+            "privacy": "Privacy policy",
+            "cookies": "Cookie policy",
+            "cookieSettings": "Cookie settings",
+            "designedBy": "Designed by"
         }
     },
     "es": {
@@ -107,7 +114,9 @@
             "name": "Nombre",
             "email": "Email",
             "message": "Mensaje",
-            "button": "Enviar"
+            "button": "Enviar",
+            "privacy": "He leído y acepto la <a href=\"politica-privacidad.html\" target=\"_blank\">Política de privacidad</a>.",
+            "privacyInfo": "Responsable: Joaquín Manuel Baamonde. Finalidad: atender tu consulta. Derechos: acceso, rectificación, supresión y otros, escribiendo a joaquinmbaamonde@gmail.com."
         },
         "footer": {
             "title-about-us": "Sobre mí",
@@ -117,7 +126,12 @@
             "services": "Servicios",
             "contact": "Contáctame",
             "title-info": "Información de contacto",
-            "subtitle-info": "Escribime y te respondo dentro de las 24hs"
+            "subtitle-info": "Escribime y te respondo dentro de las 24hs",
+            "legal": "Aviso legal",
+            "privacy": "Política de privacidad",
+            "cookies": "Política de cookies",
+            "cookieSettings": "Configurar cookies",
+            "designedBy": "Diseñado por"
         }
     },
     "pt": {
@@ -170,7 +184,9 @@
             "name": "Nome",
             "email": "E-mail",
             "message": "Mensagem",
-            "button": "Enviar"
+            "button": "Enviar",
+            "privacy": "Li e aceito a <a href=\"politica-privacidad.html\" target=\"_blank\">Política de privacidade</a>.",
+            "privacyInfo": "Responsável: Joaquín Manuel Baamonde. Finalidade: responder à sua consulta. Direitos: acesso, retificação, eliminação e outros, escrevendo para joaquinmbaamonde@gmail.com."
         },
         "footer": {
             "title-about-us": "Sobre mim",
@@ -180,7 +196,12 @@
             "services": "Serviços",
             "contact": "Fale comigo",
             "title-info": "Informações de contato",
-            "subtitle-info": "Entre em contato e responderei dentro de 24 horas"
+            "subtitle-info": "Entre em contato e responderei dentro de 24 horas",
+            "legal": "Aviso legal",
+            "privacy": "Política de privacidade",
+            "cookies": "Política de cookies",
+            "cookieSettings": "Configurar cookies",
+            "designedBy": "Desenvolvido por"
         }
     }
 }

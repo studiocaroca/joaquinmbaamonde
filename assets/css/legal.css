@@ -1,0 +1,536 @@
+/* =========================================================
+   Cumplimiento legal: banner de cookies, panel de configuración,
+   bloqueo de vídeos, casilla de privacidad, pie y páginas legales.
+   ========================================================= */
+
+/* ---------- Botones del banner (mismo tamaño, color y peso) ---------- */
+.cc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1 0;
+  min-width: 120px;
+  padding: 10px 18px;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #FFFFFF;
+  background: #7948EC;
+  border: 1px solid #7948EC;
+  border-radius: 0.2rem;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.cc-btn:hover,
+.cc-btn:focus-visible {
+  color: #FFFFFF;
+  background: #5a35b5;
+  border-color: #B9A0EF;
+  text-decoration: none;
+}
+
+.cc-btn:focus-visible {
+  outline: 2px solid #B9A0EF;
+  outline-offset: 2px;
+}
+
+.cc-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* En pantallas chicas: los tres botones apilados y del mismo ancho */
+@media (max-width: 575px) {
+  .cc-actions {
+    flex-direction: column;
+  }
+
+  .cc-actions .cc-btn {
+    flex: none;
+    width: 100%;
+  }
+}
+
+/* ---------- Banner ---------- */
+.cc-banner {
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  z-index: 10000;
+  background: rgba(10, 10, 10, 0.97);
+  border: 1px solid rgba(121, 72, 236, 0.5);
+  border-radius: 0.3rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+  color: #FFFFFF;
+}
+
+.cc-banner[hidden] {
+  display: none;
+}
+
+.cc-banner__inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 18px 22px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.cc-text {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  flex: 1 1 auto;
+}
+
+.cc-banner .cc-actions {
+  flex: 0 0 auto;
+  width: 440px;
+  max-width: 100%;
+}
+
+.cc-banner a,
+.cc-settings a {
+  color: #B9A0EF;
+  text-decoration: underline;
+}
+
+@media (max-width: 900px) {
+  .cc-banner__inner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+
+  .cc-banner .cc-actions {
+    width: 100%;
+  }
+}
+
+/* ---------- Panel de configuración ---------- */
+.cc-settings {
+  position: fixed;
+  inset: 0;
+  z-index: 10001;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.cc-settings.is-open {
+  display: flex;
+}
+
+.cc-settings__box {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow: auto;
+  padding: 28px 24px 24px;
+  background: #0a0a0a;
+  border: 1px solid rgba(121, 72, 236, 0.5);
+  border-radius: 0.3rem;
+  color: #FFFFFF;
+}
+
+.cc-settings__box h2 {
+  font-size: 1.4rem;
+  margin: 0 0 10px;
+  color: #FFFFFF;
+}
+
+.cc-settings__box > p {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.cc-close {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  background: none;
+  border: 0;
+  color: #aaa;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.cc-close:hover {
+  color: #7948EC;
+}
+
+.cc-cat {
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 14px 0;
+}
+
+.cc-cat:last-of-type {
+  margin-bottom: 14px;
+}
+
+.cc-cat__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin: 0 0 6px;
+  cursor: pointer;
+}
+
+.cc-cat p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.cc-always {
+  font-size: 0.75rem;
+  color: #B9A0EF;
+  white-space: nowrap;
+}
+
+.cc-switch {
+  position: relative;
+  flex: 0 0 auto;
+  width: 44px;
+  height: 24px;
+}
+
+.cc-switch input {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+}
+
+.cc-switch__ui {
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.25);
+  transition: background 0.15s;
+  pointer-events: none;
+}
+
+.cc-switch__ui::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  transition: transform 0.15s;
+}
+
+.cc-switch input:checked + .cc-switch__ui {
+  background: #7948EC;
+}
+
+.cc-switch input:checked + .cc-switch__ui::after {
+  transform: translateX(20px);
+}
+
+.cc-switch input:focus-visible + .cc-switch__ui {
+  outline: 2px solid #B9A0EF;
+  outline-offset: 2px;
+}
+
+/* ---------- Vídeo bloqueado hasta que se acepte ---------- */
+.video-wrapper iframe[hidden] {
+  display: none;
+}
+
+.video-consent {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 20px;
+  text-align: center;
+  background: #111;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.video-consent p {
+  max-width: 520px;
+  margin: 0;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.video-consent__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 480px;
+}
+
+@media (max-width: 575px) {
+  .video-consent {
+    position: static;
+  }
+
+  .video-wrapper:has(.video-consent) {
+    height: auto;
+    padding-bottom: 0;
+  }
+
+  .video-consent p {
+    font-size: 0.85rem;
+  }
+}
+
+/* ---------- Casilla de privacidad del formulario ---------- */
+.form-privacy {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 10px;
+  row-gap: 6px;
+  text-align: left;
+  font-size: 0.88rem;
+}
+
+.form-privacy input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  accent-color: #7948EC;
+  cursor: pointer;
+}
+
+.form-privacy label {
+  margin: 0;
+  cursor: pointer;
+}
+
+.form-privacy a {
+  color: #B9A0EF;
+  text-decoration: underline;
+}
+
+.form-privacy__info {
+  grid-column: 2;
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* ---------- Pie de página ---------- */
+.site-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  text-align: left;
+}
+
+.site-footer p {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.site-footer__legal .sep {
+  margin: 0 4px;
+  opacity: 0.6;
+}
+
+.site-footer__credit {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+  opacity: 0.85;
+}
+
+@media (max-width: 767px) {
+  .site-footer {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+/* ---------- Páginas legales ---------- */
+.legal-page {
+  background: #000;
+  color: #FFFFFF;
+}
+
+.legal-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 16px 0;
+}
+
+.legal-header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.legal-header__logo img {
+  height: 34px;
+  width: auto;
+  max-width: 60vw;
+}
+
+.legal-langs {
+  display: flex;
+  gap: 6px;
+}
+
+.legal-langs button {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 3px;
+  color: #FFFFFF;
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  padding: 4px 10px;
+  cursor: pointer;
+}
+
+.legal-langs button[aria-pressed="true"] {
+  background: #7948EC;
+  border-color: #7948EC;
+}
+
+.legal-main {
+  padding: 56px 0 40px;
+}
+
+.legal-doc {
+  max-width: 780px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+.legal-doc[hidden] {
+  display: none;
+}
+
+.legal-doc h1 {
+  font-size: 2.2rem;
+  margin-bottom: 8px;
+}
+
+.legal-doc h2 {
+  font-size: 1.25rem;
+  margin: 36px 0 10px;
+  color: #B9A0EF;
+}
+
+.legal-doc p,
+.legal-doc li {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.legal-doc a {
+  color: #B9A0EF;
+  text-decoration: underline;
+}
+
+.legal-doc dl {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 6px 18px;
+}
+
+.legal-doc dt {
+  font-weight: 600;
+}
+
+.legal-doc dd {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.legal-updated {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.legal-note {
+  font-size: 0.85rem;
+  padding: 10px 14px;
+  border-left: 3px solid #7948EC;
+  background: rgba(121, 72, 236, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.legal-table-wrap {
+  overflow-x: auto;
+  margin: 10px 0 20px;
+}
+
+.legal-table {
+  width: 100%;
+  min-width: 620px;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.legal-table th,
+.legal-table td {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 8px 10px;
+  text-align: left;
+  vertical-align: top;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.legal-table th {
+  background: rgba(121, 72, 236, 0.18);
+  color: #FFFFFF;
+}
+
+.legal-page #footer {
+  padding-bottom: 20px;
+}
+
+@media (max-width: 575px) {
+  .legal-doc dl {
+    grid-template-columns: 1fr;
+  }
+
+  .legal-doc dd {
+    margin-bottom: 8px;
+  }
+
+  .legal-doc h1 {
+    font-size: 1.7rem;
+  }
+}
+
+.legal-settings-btn {
+  flex: none;
+}
+
+.legal-doc code {
+  color: #FFFFFF;
+  background: none;
+  font-size: 0.85em;
+  word-break: break-word;
+}

@@ -87,7 +87,9 @@ if (text_length($nombre) > MAX_NAME || text_length($mensaje) > MAX_MESSAGE) {
 
 $fecha = (new DateTime('now', new DateTimeZone('Europe/Madrid')))->format('d/m/Y H:i');
 
-$subject = encode_header('Nuevo mensaje desde la web — ' . $nombre);
+// Asunto sin datos personales: el registro técnico de envíos del servidor de
+// correo guarda el asunto, así que el nombre del visitante va solo en el cuerpo.
+$subject = encode_header('Nuevo mensaje desde el formulario de la web');
 
 $body = "Nuevo mensaje desde el formulario de contacto de la web.\n\n"
       . "Nombre: {$nombre}\n"

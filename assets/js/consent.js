@@ -196,8 +196,13 @@
                 if (e.key === 'Escape') closeSettings();
             });
         }
+        // Por defecto, desactivado. Si ya hay una elección guardada, se muestra esa.
+        // Si el panel ya está abierto (p. ej. al cambiar de idioma), se respeta lo que
+        // el visitante haya marcado aunque todavía no lo haya guardado.
         var current = loadConsent();
-        var videoOn = current ? current.video : false;
+        var videoOn = current ? current.video === true : false;
+        var openBox = settings.classList.contains('is-open') && document.getElementById('cc-video');
+        if (openBox) videoOn = openBox.checked;
         settings.innerHTML =
             '<div class="cc-settings__box">' +
             '<button type="button" class="cc-close" data-cc="close" aria-label="' + t('close') + '">&times;</button>' +

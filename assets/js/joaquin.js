@@ -222,39 +222,74 @@ document.addEventListener('DOMContentLoaded', function () {
     fetchTranslations();
 });
 
-// Contact form — AJAX submit via Formspree
+// Contact form — envío AJAX a send_email.php (el servidor manda el mail, no guarda nada)
 (function () {
-    const successMessages = {
-        en: 'Your message has been sent',
-        es: 'Su mensaje ha sido enviado',
-        pt: 'Sua mensagem foi enviada'
+    const messages = {
+        es: {
+            ok: 'Tu mensaje ha sido enviado. ¡Gracias!',
+            error: 'No se pudo enviar el mensaje. Inténtalo de nuevo o escribe a joaquinmbaamonde@gmail.com.',
+            sending: 'Enviando…'
+        },
+        en: {
+            ok: 'Your message has been sent. Thank you!',
+            error: 'The message could not be sent. Please try again or write to joaquinmbaamonde@gmail.com.',
+            sending: 'Sending…'
+        },
+        pt: {
+            ok: 'Sua mensagem foi enviada. Obrigado!',
+            error: 'Não foi possível enviar a mensagem. Tente novamente ou escreva para joaquinmbaamonde@gmail.com.',
+            sending: 'Enviando…'
+        }
     };
 
     const form = document.querySelector('.contact-form');
-    const successEl = document.getElementById('form-success');
+    const statusEl = document.getElementById('form-success');
 
-    if (!form || !successEl) return;
+    if (!form || !statusEl) return;
+
+    function t(key) {
+        const lang = window.JBLang ? JBLang.get() : 'es';
+        return (messages[lang] || messages.es)[key];
+    }
+
+    function showStatus(type) {
+        statusEl.textContent = t(type);
+        statusEl.classList.toggle('form-error-msg', type === 'error');
+        statusEl.style.display = 'block';
+    }
+
+    // Si se envió sin JavaScript, send_email.php vuelve con ?enviado=1 o ?error=...
+    const params = new URLSearchParams(location.search);
+    if (params.has('enviado')) showStatus('ok');
+    else if (params.has('error')) showStatus('error');
 
     form.addEventListener('submit', async function (e) {
         e.preventDefault();
 
-        const data = new FormData(form);
+        const button = form.querySelector('[type="submit"]');
+        const label = button ? button.value : '';
+        if (button) { button.disabled = true; button.value = t('sending'); }
+        statusEl.style.display = 'none';
 
         try {
             const response = await fetch(form.action, {
                 method: 'POST',
-                body: data,
+                body: new FormData(form),
                 headers: { 'Accept': 'application/json' }
             });
+            const result = await response.json().catch(() => ({}));
 
-            if (response.ok) {
-                const lang = (document.getElementById('lang-current')?.textContent || 'en').toLowerCase();
-                successEl.textContent = successMessages[lang] || successMessages.en;
-                successEl.style.display = 'block';
+            if (response.ok && result.ok) {
+                showStatus('ok');
                 form.reset();
+            } else {
+                showStatus('error');
             }
         } catch (err) {
             console.error('Form submission error:', err);
+            showStatus('error');
+        } finally {
+            if (button) { button.disabled = false; button.value = label; }
         }
     });
 })();

@@ -1,4 +1,13 @@
 @charset "UTF-8";
+/* TT Travels Next Regular — licencia web de TypeType a nombre de Joaquín M. Baamonde (joaquinbaamonde.com).
+   Se usa solo el estilo Regular; cubre los pesos 100–400 que pide el CSS. */
+@font-face {
+  font-family: 'tt-travels-next';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 400;
+  src: url("../fonts/tt-travels-next/TT_Travels_Next_Regular.woff2") format("woff2");
+}
 /* Inter alojada localmente (sin Google Fonts) */
 @font-face {
   font-family: 'Inter';

@@ -1,0 +1,45 @@
+# joaquinbaamonde.com — configuración para el hosting (Apache / cPanel)
+
+Options -Indexes
+DirectoryIndex index.html
+
+# --- HTTPS + dominio principal -------------------------------------------
+# Todo (http, sin www y el dominio joaquinmbaamonde.com) va a
+# https://www.joaquinbaamonde.com
+# IMPORTANTE: activar el certificado SSL en cPanel ANTES de subir este archivo.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    RewriteCond %{HTTPS} off [OR]
+    RewriteCond %{HTTP_HOST} !^www\.joaquinbaamonde\.com$ [NC]
+    RewriteRule ^ https://www.joaquinbaamonde.com%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# --- Cabeceras de seguridad ----------------------------------------------
+<IfModule mod_headers.c>
+    Header always set Strict-Transport-Security "max-age=31536000" env=HTTPS
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set X-Frame-Options "SAMEORIGIN"
+</IfModule>
+
+# --- Fuentes: solo para esta web (licencia de TT Travels Next) -----------
+# Impide que otras webs enlacen las fuentes desde este servidor.
+<IfModule mod_rewrite.c>
+    RewriteCond %{HTTP_REFERER} !^$
+    RewriteCond %{HTTP_REFERER} !^https?://(www\.)?joaquinb?m?baamonde\.com/ [NC]
+    RewriteRule \.(woff2?|ttf|otf|eot)$ - [F,NC,L]
+</IfModule>
+<IfModule mod_headers.c>
+    <FilesMatch "\.(woff2?)$">
+        Header set Access-Control-Allow-Origin "https://www.joaquinbaamonde.com"
+    </FilesMatch>
+</IfModule>
+
+# --- Bloquear archivos de desarrollo -------------------------------------
+<IfModule mod_rewrite.c>
+    RewriteRule ^(node_modules|assets/scss|\.git|\.claude)(/|$) - [F,L]
+</IfModule>
+<FilesMatch "^(package(-lock)?\.json|README\.md|translations\.json\.bak|.*\.map|\.gitignore)$">
+    Require all denied
+</FilesMatch>

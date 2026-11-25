@@ -299,6 +299,20 @@
   }
 }
 
+/* ---------- Formulario: campo trampa y mensaje de error ---------- */
+.form-hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.form-success-msg.form-error-msg {
+  border-color: rgba(248, 92, 112, 0.6);
+  background: rgba(248, 92, 112, 0.12);
+}
+
 /* ---------- Casilla de privacidad del formulario ---------- */
 .form-privacy {
   display: grid;
